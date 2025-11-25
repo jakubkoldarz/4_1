@@ -45,6 +45,19 @@ app.get("/math/power/:base/:exponent", (req, res) => {
     }
 });
 
+app.get("/math/isprime/:value", (req, res) => {
+    const value = parseInt(req.params.value, 10);
+    if (isNaN(value) || value < 2) {
+        return res.json({ isPrime: false });
+    }
+    for (let i = 2; i <= Math.sqrt(value); i++) {
+        if (value % i === 0) {
+            return res.json({ isPrime: false });
+        }
+    }
+    res.json({ isPrime: true });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
