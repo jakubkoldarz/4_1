@@ -80,6 +80,45 @@ app.get("/math/gcdlcm/:a/:b", (req, res) => {
     res.json({ gcd: gcd(a, b), lcm: lcm(a, b) });
 });
 
+app.get("/math/average", (req, res) => {
+    const numbersStr = req.query.numbers;
+    if (!numbersStr) {
+        return res.status(400).json({ error: "Numbers are required." });
+    }
+
+    const numbers = numbersStr.split(",").map(Number);
+    if (numbers.some(isNaN)) {
+        return res.status(400).json({ error: "Invalid input: all values must be numbers." });
+    }
+    if (numbers.length === 0) {
+        return res.status(400).json({ error: "Please provide at least one number." });
+    }
+
+    // Arithmetic Mean
+    const arithmeticMean = numbers.reduce((acc, val) => acc + val, 0) / numbers.length;
+
+    // Geometric Mean
+    if (numbers.some((n) => n <= 0)) {
+        return res.status(400).json({ error: "Geometric mean is only defined for positive numbers." });
+    }
+    const geometricMean = Math.pow(
+        numbers.reduce((acc, val) => acc * val, 1),
+        1 / numbers.length
+    );
+
+    // Harmonic Mean
+    if (numbers.some((n) => n === 0)) {
+        return res.status(400).json({ error: "Harmonic mean is not defined for a set containing zero." });
+    }
+    const harmonicMean = numbers.length / numbers.reduce((acc, val) => acc + 1 / val, 0);
+
+    res.json({
+        arithmetic: arithmeticMean.toFixed(2),
+        geometric: geometricMean.toFixed(2),
+        harmonic: harmonicMean.toFixed(2),
+    });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
