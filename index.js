@@ -3,7 +3,6 @@
 const express = require("express");
 const app = express();
 
-// define endpoint for exercise 1 here
 app.get("/math/circle/:r", (req, res) => {
     req.params.r = parseFloat(req.params.r);
     const radius = req.params.r;
@@ -12,7 +11,15 @@ app.get("/math/circle/:r", (req, res) => {
     res.json({ area, circumference });
 });
 
-//TODO2
+app.get("/math/rectangle/:w/:h", (req, res) => {
+    req.params.w = parseFloat(req.params.w);
+    req.params.h = parseFloat(req.params.h);
+    const width = req.params.w;
+    const height = req.params.h;
+    const area = width * height;
+    const perimeter = 2 * (width + height);
+    res.json({ area, perimeter });
+});
 
 //TODO3
 
