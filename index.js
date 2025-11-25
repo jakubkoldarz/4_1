@@ -21,7 +21,26 @@ app.get("/math/rectangle/:w/:h", (req, res) => {
     res.json({ area, perimeter });
 });
 
-//TODO3
+app.get("/math/power/:base/:exponent", (req, res) => {
+    const base = parseFloat(req.params.base);
+    const exponent = parseFloat(req.params.exponent);
+
+    if (isNaN(base) || isNaN(exponent)) {
+        return res.status(400).json({ error: "Invalid input" });
+    }
+
+    const result = Math.pow(base, exponent);
+
+    if (req.query.root === "true") {
+        const root = Math.sqrt(base);
+        if (isNaN(root)) {
+            return res.status(400).json({ error: "Invalid input for root" });
+        }
+        res.json({ result, root });
+    } else {
+        res.json({ result });
+    }
+});
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
