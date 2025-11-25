@@ -58,6 +58,28 @@ app.get("/math/isprime/:value", (req, res) => {
     res.json({ isPrime: true });
 });
 
+app.get("/math/gcdlcm/:a/:b", (req, res) => {
+    const a = parseInt(req.params.a, 10);
+    const b = parseInt(req.params.b, 10);
+
+    let gcd = (x, y) => {
+        {
+            while (y) {
+                let temp = y;
+                y = x % y;
+                x = temp;
+            }
+            return x;
+        }
+    };
+
+    let lcm = (x, y) => {
+        return (x * y) / gcd(x, y);
+    };
+
+    res.json({ gcd: gcd(a, b), lcm: lcm(a, b) });
+});
+
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Server listening on port ${PORT}`);
